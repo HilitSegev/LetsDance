@@ -23,12 +23,12 @@ IND_TO_BODYPART = {v: k for k, v in BODYPART_TO_IND.items()}
 
 # Maps bones to a matplotlib color name.
 KEYPOINT_EDGE_INDS_TO_COLOR = {
-    (0, 1): 'm',
-    (0, 2): 'c',
-    (1, 3): 'm',
-    (2, 4): 'c',
-    (0, 5): 'm',
-    (0, 6): 'c',
+    (0, 1): 'k',
+    (0, 2): 'k',
+    (1, 3): 'k',
+    (2, 4): 'k',
+    (0, 5): 'k',
+    (0, 6): 'k',
     (5, 7): 'm',
     (7, 9): 'm',
     (6, 8): 'c',

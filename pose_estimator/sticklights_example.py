@@ -42,6 +42,8 @@ def draw_sticklights_image(input_image, model, out_path=None, show_image=False,
     # run model for the input image and extract the keypoints_with_scores
     keypoints_with_scores = detect_pose(input_image, model)
 
+
+
     # use "drawing_utils" to plot the keypoints_with_scores on the black image
     sticklights_image = drawing_utils.draw_prediction_on_image(black_image, keypoints_with_scores,
                                                                colors_dict=colors_dict)
@@ -82,5 +84,5 @@ if __name__ == "__main__":
     })
 
     # create sticklights image
-    sticklights_image = draw_sticklights_image(image, model, out_path, show_image=False,
+    sticklights_image = draw_sticklights_image(image, model, out_path, show_image=True,
                                                colors_dict=selected_colors_dict)

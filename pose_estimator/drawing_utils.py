@@ -6,6 +6,8 @@ from consts import *
 import matplotlib.pyplot as plt
 import cv2
 
+from pose_estimator import pose_estimation_utils
+
 
 def _keypoints_and_edges_for_display(keypoints_with_scores,
                                      height,
@@ -42,6 +44,7 @@ def _keypoints_and_edges_for_display(keypoints_with_scores,
                                      kpts_scores > keypoint_threshold, :]
         keypoints_all.append(kpts_above_thresh_absolute)
 
+
         for edge_pair, color in colors_dict.items():
             if (kpts_scores[edge_pair[0]] > keypoint_threshold and
                     kpts_scores[edge_pair[1]] > keypoint_threshold):
@@ -66,7 +69,7 @@ def _keypoints_and_edges_for_display(keypoints_with_scores,
 
 def draw_prediction_on_image(
         image, keypoints_with_scores, crop_region=None, close_figure=False,
-        output_image_height=None, colors_dict=KEYPOINT_EDGE_INDS_TO_COLOR):
+        output_image_height=None, colors_dict=KEYPOINT_EDGE_INDS_TO_COLOR, remove_face=True):
     """Draws the keypoint predictions on image.
 
     Args:
@@ -101,16 +104,27 @@ def draw_prediction_on_image(
     # Turn off tick labels
     scat = ax.scatter([], [], s=60, color='#FF1493', zorder=3)
 
-    (keypoint_locs, keypoint_edges,
-     edge_colors) = _keypoints_and_edges_for_display(
+    (keypoint_locs, keypoint_edges, edge_colors) = _keypoints_and_edges_for_display(
         keypoints_with_scores, height, width, colors_dict=colors_dict)
 
-    line_segments.set_segments(keypoint_edges)
-    line_segments.set_color(edge_colors)
+    # add ellipse for head
+    # TODO: don't run if there are points of face below threshold
+    ellipse = pose_estimation_utils.get_head_ellipse(keypoint_locs)
+    ax.add_patch(ellipse)
+
+    if remove_face:
+        colors_dict = {k: v for k, v in colors_dict.items() if k[0] > 4 and k[1] > 4}
+        (keypoint_locs, keypoint_edges, edge_colors) = _keypoints_and_edges_for_display(
+            keypoints_with_scores, height, width, colors_dict=colors_dict)
+        keypoint_locs = keypoint_locs[5:]
+
+    # line_segments.set_segments(keypoint_edges)
+    # line_segments.set_color(edge_colors)
     if keypoint_edges.shape[0]:
         line_segments.set_segments(keypoint_edges)
         line_segments.set_color(edge_colors)
     if keypoint_locs.shape[0]:
+        # add key points to scatter
         scat.set_offsets(keypoint_locs)
 
     if crop_region is not None:
