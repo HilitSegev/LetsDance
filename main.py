@@ -2,11 +2,17 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import sys
 import split_and_merge.split_and_merge_videos as split_merge
-
+import database.firebase as fb
+from database.mongodb import DB
 
 if __name__ == '__main__':
 
     for i in range(1, len(sys.argv)):
+        db = DB()
+        #db.upload_video_frames("pictures", "C:\\Users\\oritf\\PycharmProjects\\LetsDance\\database", "frame", 1)
+        #fb.upload_photo("frame.jpg")
+        #fb.upload_to_bucket()
+
         #TODO change args from path to video name
         video_name = sys.argv[i]
         # path = 'C:\\Users\\oritf\\PycharmProjects\\final_project\\hand'

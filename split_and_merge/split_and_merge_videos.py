@@ -2,6 +2,7 @@ import subprocess
 import cv2
 import os
 import ffmpeg
+from database.mongodb import DB
 
 
 def compress_video(video_name, video_path):
@@ -67,6 +68,7 @@ def video_to_picture(video_name):
         cv2.imwrite("frame" + num + ".jpg", image)  # save frame as JPG file
         success, image = vidcap.read()
         count += 1
-
+    db = DB()
+    db.upload_video_frames(pictures_path, video_name, count)
     os.chdir(my_path)
     return pictures_path
