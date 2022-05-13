@@ -9,7 +9,7 @@ if __name__ == '__main__':
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
 
     # video to images
-    images_list = vp.video_to_images(video_path)
+    images_list = vp.video_to_images(video_path, save_to_disk=False)
 
     # pose estimation
     pose_df = pose_estimation.detect_pose(images_list)
