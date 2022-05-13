@@ -1,3 +1,7 @@
+BODYPARTS = ['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_shoulder', 'right_shoulder', 'left_elbow',
+             'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee',
+             'left_ankle', 'right_ankle']
+
 # Dictionary that maps from joint names to keypoint indices.
 BODYPART_TO_IND = {
     'nose': 0,
@@ -42,7 +46,6 @@ KEYPOINT_EDGE_INDS_TO_COLOR = {
     (12, 14): 'c',
     (14, 16): 'c'
 }
-
 
 KEYPOINT_EDGE_BODYPARTS_TO_COLOR = {
     (IND_TO_BODYPART[k[0]], IND_TO_BODYPART[k[1]]): v for k, v in KEYPOINT_EDGE_INDS_TO_COLOR.items()

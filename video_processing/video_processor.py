@@ -1,16 +1,18 @@
 import cv2
-
+import os
 
 def video_to_images(video_path, save_to_disk=False):
     # init output
     if save_to_disk:
-        out_path = video_path + "/temp/"
+        out_path = "".join(video_path.split(".")[:-1]) + "_temp/"
+        if not os.path.exists(out_path):
+            os.mkdir(out_path)
     else:
         frames_list = []
 
     # load frames
     vid_cap = cv2.VideoCapture(video_path)
-    success, frame = vidcap.read()
+    success, frame = vid_cap.read()
     counter = 0
     while success:
         if save_to_disk:

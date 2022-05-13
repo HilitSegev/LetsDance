@@ -1,6 +1,8 @@
 import sys
+import pandas as pd
+
 from pose_estimator import pose_estimation, skeleton_creator
-import video_processing.video_processor as vp
+from video_processing import video_processor as vp
 from outliers_handling import outliers_detector
 
 if __name__ == '__main__':
@@ -9,15 +11,17 @@ if __name__ == '__main__':
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
 
     # video to images
-    images_list = vp.video_to_images(video_path, save_to_disk=False)
+    # images_list = vp.video_to_images(video_path, save_to_disk=False)
 
     # pose estimation
-    pose_df = pose_estimation.detect_pose(images_list)
+    # pose_df = pose_estimation.detect_pose(images_list)
+    # pose_df.to_csv("".join(video_path.split(".")[:-1]) + "_pose_df.csv")
 
     # TODO: Save results to cloud storage
     # results_cache_success = cloud_manager.save_pose_df(pose_df, video_path)
 
     # detect anomalies
+    pose_df = pd.read_csv("".join(video_path.split(".")[:-1]) + "_pose_df.csv", index_col=0)
     anomaly_inds = outliers_detector.detect_outliers(pose_df)
 
     # fix anomalies
