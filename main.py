@@ -10,18 +10,18 @@ if __name__ == '__main__':
     video_path = sys.argv[1]
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
 
-    # video to images
-    # images_list = vp.video_to_images(video_path, save_to_disk=False)
+    pose_df = cloud_manager.load_pose_df(video_path)
+    if not pose_df:
+        # video to images
+        images_list = vp.video_to_images(video_path, save_to_disk=False)
 
-    # pose estimation
-    # pose_df = pose_estimation.detect_pose(images_list)
-    # pose_df.to_csv("".join(video_path.split(".")[:-1]) + "_pose_df.csv")
+        # pose estimation
+        pose_df = pose_estimation.detect_pose(images_list)
 
-    # TODO: Save results to cloud storage
-    # results_cache_success = cloud_manager.save_pose_df(pose_df, video_path)
+        # TODO: Save results to cloud storage
+        results_cache_success = cloud_manager.save_pose_df(pose_df, video_path)
 
     # detect anomalies
-    pose_df = pd.read_csv("".join(video_path.split(".")[:-1]) + "_pose_df.csv", index_col=0)
     anomaly_inds = outliers_detector.detect_outliers(pose_df)
 
     # fix anomalies
