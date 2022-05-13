@@ -1,6 +1,6 @@
 from matplotlib.patches import Ellipse
 import numpy as np
-from consts import BODYPART_TO_IND
+from pose_estimator.consts import BODYPART_TO_IND
 
 
 def distance(p1, p2):

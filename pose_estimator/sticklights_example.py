@@ -4,11 +4,11 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 
-import drawing_utils
-from consts import *
+from pose_estimator import drawing_utils
+from pose_estimator.consts import *
 
 
-def detect_pose(input_image, model):
+def detect_pose(input_image, model, input_size):
     """Runs detection on an input image.
 
     Args:
@@ -34,18 +34,18 @@ def detect_pose(input_image, model):
     return keypoints_with_scores
 
 
-def draw_sticklights_image(input_image, model, out_path=None, show_image=False,
+def draw_sticklights_image(input_image, model, input_size, out_path=None, show_image=False,
                            colors_dict=KEYPOINT_EDGE_INDS_TO_COLOR):
     # create black image, the same size as "input_image"
     black_image = np.zeros(input_image.shape)
+    # create background image,the same size as "input_image"
+    background_image = plt.imread("resources/background_image_stage.jpg", input_image.shape)
 
     # run model for the input image and extract the keypoints_with_scores
-    keypoints_with_scores = detect_pose(input_image, model)
-
-
+    keypoints_with_scores = detect_pose(input_image, model, input_size)
 
     # use "drawing_utils" to plot the keypoints_with_scores on the black image
-    sticklights_image = drawing_utils.draw_prediction_on_image(black_image, keypoints_with_scores,
+    sticklights_image = drawing_utils.draw_prediction_on_image(background_image, keypoints_with_scores,
                                                                colors_dict=colors_dict)
 
     # show and save
@@ -84,5 +84,5 @@ if __name__ == "__main__":
     })
 
     # create sticklights image
-    sticklights_image = draw_sticklights_image(image, model, out_path, show_image=True,
+    sticklights_image = draw_sticklights_image(image, model, input_size, out_path, show_image=True,
                                                colors_dict=selected_colors_dict)

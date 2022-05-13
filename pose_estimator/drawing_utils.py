@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 import matplotlib.patches as patches
 
-from consts import *
+from pose_estimator.consts import *
 import matplotlib.pyplot as plt
 import cv2
 
