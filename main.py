@@ -4,6 +4,7 @@ import pandas as pd
 from pose_estimator import pose_estimation, skeleton_creator
 from video_processing import video_processor as vp
 from outliers_handling import outliers_detector
+from cloud_storage import cloud_manager
 
 if __name__ == '__main__':
     # load resources for testing; will get from server
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
 
     pose_df = cloud_manager.load_pose_df(video_path)
-    if not pose_df:
+    if pose_df is None:
         # video to images
         images_list = vp.video_to_images(video_path, save_to_disk=False)
 

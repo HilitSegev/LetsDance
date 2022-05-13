@@ -11,6 +11,7 @@ def save_pose_df(pose_df, video_path):
 
 def load_pose_df(video_path):
     try:
-        return pd.read_csv("resources/pose_dfs/" + "".join(video_path.split("/")[-1].split(".")[:-1]) + "_pose_df.csv")
+        return pd.read_csv("resources/pose_dfs/" + "".join(video_path.split("/")[-1].split(".")[:-1]) + "_pose_df.csv",
+                           index_col=0)
     except:
         return None
