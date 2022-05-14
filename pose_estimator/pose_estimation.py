@@ -30,6 +30,6 @@ def detect_pose(images_list):
 
         # Output is a [1, 1, 17, 3] tensor.
         # TODO: Handle multiple images in one batch
-        pose_df.loc[ind] = list(outputs['output_0'].numpy()[0, 0, :, :])
+        pose_df.loc[ind] = [tuple(x) for x in list(outputs['output_0'].numpy()[0, 0, :, :])]
 
     return pose_df
