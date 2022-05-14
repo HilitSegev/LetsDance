@@ -1,6 +1,7 @@
 import cv2
 import os
 
+
 def video_to_images(video_path, save_to_disk=False):
     # init output
     if save_to_disk:
@@ -26,3 +27,14 @@ def video_to_images(video_path, save_to_disk=False):
 
     # return
     return out_path if save_to_disk else frames_list
+
+
+def images_to_video(generated_images_list, audio_source=None):
+    # TODO: make video from images
+    final_video_path = ...
+
+    if audio_source is not None:
+        audio_file = ...
+        # TODO: add audio to video
+
+    return final_video_path

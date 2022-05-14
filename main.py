@@ -5,6 +5,7 @@ from pose_estimator import pose_estimation, skeleton_creator
 from video_processing import video_processor as vp
 from outliers_handling import outliers_detector
 from cloud_storage import cloud_manager
+import moviepy.editor as mp
 
 if __name__ == '__main__':
     # load resources for testing; will get from server
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     generated_images_list = skeleton_creator.generate_images(fixed_pose_df, mode='sticklight', background_image=bg_img)
 
     # create final video
-    final_video_path = vp.images_to_video(generated_images_list)
+    final_video_path = vp.images_to_video(generated_images_list, audio_source=video_path)
 
     # TODO: change this to "return" when not in "main"
     print(final_video_path)
