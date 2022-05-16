@@ -1,5 +1,6 @@
 import cv2
 import os
+import moviepy.editor as mp
 
 
 def video_to_images(video_path, save_to_disk=False):
@@ -29,12 +30,26 @@ def video_to_images(video_path, save_to_disk=False):
     return out_path if save_to_disk else frames_list
 
 
-def images_to_video(generated_images_list, audio_source=None):
+def images_to_video(generated_images_list, video_path, audio_source=None):
     # TODO: make video from images
     final_video_path = ...
 
     if audio_source is not None:
-        audio_file = ...
-        # TODO: add audio to video
+        my_clip = mp.VideoFileClip(video_path)
+        #TODO:is this the right place to put it?
+        my_clip.audio.write_audiofile(r"audio_file.mp3")
+        #TODO: add audio to video
+        final_video_path = add_audio_to_video(final_video_path,audio_file)
 
     return final_video_path
+
+
+def get_metadata_for_video(video_path):
+    vid_cap = cv2.VideoCapture(video_path)
+    metadata = dict()
+    if vid_cap.isOpened():
+        metadata['width'] = vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float `width`
+        metadata['height'] = vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float `height`
+        metadata['fps'] = vid_cap.get(cv2.CAP_PROP_FPS)  # float `fps`
+        metadata['total_frames'] = vid_cap.get(cv2.CAP_PROP_FRAME_COUNT)  # float `total_frame_in_the_video` (should not be applicable for camera)
+    return metadata

@@ -11,12 +11,17 @@ if __name__ == '__main__':
     # load resources for testing; will get from server
     video_path = sys.argv[1]
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
-
+    
+    # metadata extraction
+    metadata = vp.get_metadata_for_video(video_path)
+    
+    # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
+    
     if pose_df is None:
         # video to images
         images_list = vp.video_to_images(video_path, save_to_disk=False)
-
+        
         # pose estimation
         pose_df = pose_estimation.detect_pose(images_list)
 
