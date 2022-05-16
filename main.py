@@ -18,7 +18,7 @@ if __name__ == '__main__':
     
     # set black image as background if no background is given
     if bg_img is None:
-        black_image = np.zeros(metadata['width'], metadata['height'])
+        bg_img = np.zeros((metadata['width'], metadata['height'], 3))
     
     # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
