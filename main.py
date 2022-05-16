@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import numpy as np
 
 from pose_estimator import pose_estimation, skeleton_creator
 from video_processing import video_processor as vp
