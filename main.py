@@ -12,8 +12,12 @@ if __name__ == '__main__':
     video_path = sys.argv[1]
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
     
-    # metadata extraction
+    # metadata extraction - width, height, fps, video length
     metadata = vp.get_metadata_for_video(video_path)
+    
+    # set black image as background if no background is given
+    if bg_img is None:
+        black_image = np.zeros(metadata['width'], metadata['height'])
     
     # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
