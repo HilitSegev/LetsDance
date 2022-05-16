@@ -48,8 +48,8 @@ def get_metadata_for_video(video_path):
     vid_cap = cv2.VideoCapture(video_path)
     metadata = dict()
     if vid_cap.isOpened():
-        metadata['width'] = vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float `width`
-        metadata['height'] = vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float `height`
-        metadata['fps'] = vid_cap.get(cv2.CAP_PROP_FPS)  # float `fps`
-        metadata['total_frames'] = vid_cap.get(cv2.CAP_PROP_FRAME_COUNT)  # float `total_frame_in_the_video` (should not be applicable for camera)
+        metadata['width'] = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        metadata['height'] = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        metadata['fps'] = int(vid_cap.get(cv2.CAP_PROP_FPS))
+        metadata['total_frames'] = int(vid_cap.get(cv2.CAP_PROP_FRAME_COUNT))
     return metadata
