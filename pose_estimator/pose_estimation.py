@@ -31,5 +31,25 @@ def detect_pose(images_list):
         # Output is a [1, 1, 17, 3] tensor.
         # TODO: Handle multiple images in one batch
         pose_df.loc[ind] = [tuple(x) for x in list(outputs['output_0'].numpy()[0, 0, :, :])]
+        
+        
+        
+    
+    # detect face
+    def tuple_mean(t1, t2):
+        assert len(t1) == len(t2)
+        return tuple((t1[i] + t2[i]) / 2 for i in range(len(t1)))
 
+
+    pose_df['face_center'] = pose_df[['left_ear', 'right_ear']].apply(lambda row: tuple_mean(*row), axis=1)
+    face_width = distance(pose_df['left_ear'], pose_df['right_ear'])
+
+    # get chin's location
+    chin_location = np.mean([keypoints_map['left_shoulder'],
+                             keypoints_map['right_shoulder'],
+                             keypoints_map['nose']],
+                            axis=0)
+    face_height = 2 * distance(keypoints_map['nose'], chin_location)
+    
+    
     return pose_df
