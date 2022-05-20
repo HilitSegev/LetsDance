@@ -34,10 +34,8 @@ if __name__ == '__main__':
         results_cache_success = cloud_manager.save_pose_df(pose_df, video_path)
 
     # when loading from csv, need to eval tuples
-    try:
-        pose_df = pose_df.applymap(eval)
-    except:
-        pass
+    else:
+        pose_df = pose_df.astype(str).applymap(eval)
 
     # detect anomalies
     anomaly_inds = outliers_detector.detect_outliers(pose_df)

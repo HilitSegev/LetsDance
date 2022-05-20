@@ -3,8 +3,20 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from pose_estimator.consts import BODYPARTS
+import numpy as np
+
 
 def detect_pose(images_list):
+    def distance(p1, p2):
+        p1, p2 = np.asarray(p1), np.asarray(p2)
+        return np.linalg.norm(p1 - p2)
+
+    def tuple_mean(tuple_of_tuples):
+        return tuple(
+            sum([t[i] for t in tuple_of_tuples]) / len(tuple_of_tuples) \
+            for i in range(len(tuple_of_tuples[0]))
+        )
+
     # init pose_df
     pose_df = pd.DataFrame(index=range(len(images_list)), columns=BODYPARTS)
 
@@ -30,26 +42,22 @@ def detect_pose(images_list):
 
         # Output is a [1, 1, 17, 3] tensor.
         # TODO: Handle multiple images in one batch
-        pose_df.loc[ind] = [tuple(x) for x in list(outputs['output_0'].numpy()[0, 0, :, :])]
-        
-        
-        
-    
-    # detect face
-    def tuple_mean(t1, t2):
-        assert len(t1) == len(t2)
-        return tuple((t1[i] + t2[i]) / 2 for i in range(len(t1)))
+        body_poses = [tuple(x) for x in list(outputs['output_0'].numpy()[0, 0, :, :])]
+        pose_df.loc[ind] = body_poses + [0]*(len(pose_df.loc[ind]) - len(body_poses))
 
+        # detect face
+        # using [1,2,3] to allow assignment of tuple to cell in DataFrame
+        pose_df.loc[ind, [1, 2, 3]] = tuple_mean((pose_df.loc[ind, 'left_ear'], pose_df.loc[ind, 'right_ear']))
+        pose_df.loc[[ind], 'face_center'] = pose_df.loc[[ind], [1, 2, 3]].apply(tuple, axis=1)
+        pose_df.loc[ind, 'face_width'] = distance(pose_df.loc[ind, 'left_ear'][:-1], pose_df.loc[ind, 'right_ear'][:-1])
 
-    pose_df['face_center'] = pose_df[['left_ear', 'right_ear']].apply(lambda row: tuple_mean(*row), axis=1)
-    face_width = distance(pose_df['left_ear'], pose_df['right_ear'])
+        pose_df.loc[ind, [1, 2, 3]] = tuple_mean((pose_df.loc[ind, 'left_shoulder'],
+                                                  pose_df.loc[ind, 'right_shoulder'],
+                                                  pose_df.loc[ind, 'nose']))
+        pose_df.loc[[ind], 'chin'] = pose_df.loc[[ind], [1, 2, 3]].apply(tuple, axis=1)
+        pose_df.loc[ind, 'face_height'] = 2 * distance(pose_df.loc[ind, 'nose'][:-1], pose_df.loc[ind, 'chin'][:-1])
 
-    # get chin's location
-    chin_location = np.mean([keypoints_map['left_shoulder'],
-                             keypoints_map['right_shoulder'],
-                             keypoints_map['nose']],
-                            axis=0)
-    face_height = 2 * distance(keypoints_map['nose'], chin_location)
-    
-    
+        # remove temp columns
+        pose_df.drop([1, 2, 3], axis=1, inplace=True)
+
     return pose_df
