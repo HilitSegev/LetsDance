@@ -12,21 +12,21 @@ if __name__ == '__main__':
     # load resources for testing; will get from server
     video_path = sys.argv[1]
     bg_img = sys.argv[2] if len(sys.argv) > 2 else None
-    
+
     # metadata extraction - width, height, fps, video length
     metadata = vp.get_metadata_for_video(video_path)
-    
+
     # set black image as background if no background is given
     if bg_img is None:
         bg_img = np.zeros((metadata['width'], metadata['height'], 3))
-    
+
     # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
-    
+
     if pose_df is None:
         # video to images
         images_list = vp.video_to_images(video_path, save_to_disk=False)
-        
+
         # pose estimation
         pose_df = pose_estimation.detect_pose(images_list)
 
@@ -46,7 +46,13 @@ if __name__ == '__main__':
     fixed_pose_df = outliers_detector.fix_outliers(pose_df, anomaly_inds)
 
     # draw generated images
-    generated_images_list = skeleton_creator.generate_images(fixed_pose_df, mode='sticklight', background_image=bg_img)
+    generated_images_list = skeleton_creator.generate_images(fixed_pose_df, mode='sticklight', background_image=bg_img,
+                                                             colors_dict={('nose', 'left_eye'): (0, 0, 255),
+                                                                          ('nose', 'right_eye'): (0, 0, 255),
+                                                                          ('left_eye', 'left_ear'): (0, 0, 255),
+                                                                          ('right_eye', 'right_ear'): (0, 0, 255),
+                                                                          ('nose', 'left_shoulder'): (0, 0, 255),
+                                                                          ('nose', 'right_shoulder'): (0, 0, 255)})
 
     # create final video
     final_video_path = vp.images_to_video(generated_images_list, audio_source=video_path)

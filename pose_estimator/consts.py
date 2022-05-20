@@ -21,6 +21,24 @@ BONES = [('nose', 'left_eye'),
          ('right_hip', 'right_knee'),
          ('right_knee', 'right_ankle')]
 
+COLORS = {('nose', 'left_eye'): (0, 255, 0),
+          ('nose', 'right_eye'): (0, 255, 0),
+          ('left_eye', 'left_ear'): (0, 255, 0),
+          ('right_eye', 'right_ear'): (0, 255, 0),
+          ('nose', 'left_shoulder'): (0, 255, 0),
+          ('nose', 'right_shoulder'): (0, 255, 0),
+          ('left_shoulder', 'left_elbow'): (0, 255, 0),
+          ('left_elbow', 'left_wrist'): (0, 255, 0),
+          ('right_shoulder', 'right_elbow'): (0, 255, 0),
+          ('right_elbow', 'right_wrist'): (0, 255, 0),
+          ('left_shoulder', 'right_shoulder'): (0, 255, 0),
+          ('left_shoulder', 'left_hip'): (0, 255, 0),
+          ('right_shoulder', 'right_hip'): (0, 255, 0),
+          ('left_hip', 'right_hip'): (0, 255, 0),
+          ('left_hip', 'left_knee'): (0, 255, 0),
+          ('left_knee', 'left_ankle'): (0, 255, 0),
+          ('right_hip', 'right_knee'): (0, 255, 0),
+          ('right_knee', 'right_ankle'): (0, 255, 0)}
 
 # Dictionary that maps from joint names to keypoint indices.
 BODYPART_TO_IND = {
