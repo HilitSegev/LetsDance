@@ -1,6 +1,19 @@
 import cv2
 import os
 import moviepy.editor as mp
+from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip
+
+def add_audio_to_video(video_file, audio_file):
+    # load the video
+    video_clip = VideoFileClip(video_file)
+    # load the audio
+    audio_clip = AudioFileClip(audio_file)
+
+    final_clip = video_clip.set_audio(audio_clip)
+
+    final_path = "final_"+video_file
+    final_clip.write_videofile(final_path)
+    return final_path
 
 
 def video_to_images(video_path, save_to_disk=False):
@@ -43,11 +56,11 @@ def images_to_video(generated_images_list, video_path, audio_source=None):
     video.release()
 
     if audio_source is not None:
-        my_clip = mp.VideoFileClip(video_path)
+        my_clip = mp.VideoFileClip(audio_source)
         #TODO:is this the right place to put it?
         my_clip.audio.write_audiofile(r"audio_file.mp3")
         #TODO: add audio to video
-        final_video_path = add_audio_to_video(final_video_path,audio_file)
+        final_video_path = add_audio_to_video(final_video_path, r"audio_file.mp3")
 
     return final_video_path
 

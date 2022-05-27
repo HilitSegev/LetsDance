@@ -53,7 +53,7 @@ if __name__ == '__main__':
                                                                           ('nose', 'right_shoulder'): (0, 0, 0)})
 
     # create final video
-    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=None)
+    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=video_path)
 
     # save video to cloud storage
     video_save_success = cloud_manager.save_video_to_cloud(final_video_path)
