@@ -32,7 +32,15 @@ def video_to_images(video_path, save_to_disk=False):
 
 def images_to_video(generated_images_list, video_path, audio_source=None):
     # TODO: make video from images
-    final_video_path = ...
+    final_video_path = video_path.split("/")[-1]
+
+    video = cv2.VideoWriter(final_video_path, cv2.VideoWriter_fourcc(*'MP4V'), 30, (900, 734))
+
+    for image in generated_images_list:
+        video.write(image.astype('uint8'))
+
+    cv2.destroyAllWindows()
+    video.release()
 
     if audio_source is not None:
         my_clip = mp.VideoFileClip(video_path)

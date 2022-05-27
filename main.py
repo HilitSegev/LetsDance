@@ -45,15 +45,15 @@ if __name__ == '__main__':
 
     # draw generated images
     generated_images_list = skeleton_creator.generate_images(fixed_pose_df, mode='sticklight', background_image=bg_img,
-                                                             colors_dict={('nose', 'left_eye'): (0, 0, 255),
-                                                                          ('nose', 'right_eye'): (0, 0, 255),
-                                                                          ('left_eye', 'left_ear'): (0, 0, 255),
-                                                                          ('right_eye', 'right_ear'): (0, 0, 255),
-                                                                          ('nose', 'left_shoulder'): (0, 0, 255),
-                                                                          ('nose', 'right_shoulder'): (0, 0, 255)})
+                                                             colors_dict={('nose', 'left_eye'): (0, 0, 0),
+                                                                          ('nose', 'right_eye'): (0, 0, 0),
+                                                                          ('left_eye', 'left_ear'): (0, 0, 0),
+                                                                          ('right_eye', 'right_ear'): (0, 0, 0),
+                                                                          ('nose', 'left_shoulder'): (0, 0, 0),
+                                                                          ('nose', 'right_shoulder'): (0, 0, 0)})
 
     # create final video
-    final_video_path = vp.images_to_video(generated_images_list, audio_source=video_path)
+    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=None)
 
     # TODO: change this to "return" when not in "main"
     print(final_video_path)
