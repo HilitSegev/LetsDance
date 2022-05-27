@@ -55,6 +55,8 @@ if __name__ == '__main__':
     # create final video
     final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=None)
 
+    # save video to cloud storage
+    video_save_success = cloud_manager.save_video_to_cloud(final_video_path)
     # TODO: change this to "return" when not in "main"
     print(final_video_path)
 
