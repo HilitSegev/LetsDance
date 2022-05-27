@@ -1,5 +1,5 @@
 import pandas as pd
-from pose_estimator.consts import BODYPARTS, BONES, COLORS
+from pose_estimator.consts import BODYPARTS, BONES, COLORS, FACE_POINTS
 import cv2
 
 
@@ -14,11 +14,9 @@ def plot_skeleton(bg_img, xs, ys, colors_to_use, face_width, face_height):
     xs, ys = xs.apply(round), ys.apply(round)
     # plot bones
     for bone in BONES:
+        if bone[0] in FACE_POINTS or bone[1] in FACE_POINTS:
+            continue
         plot_bone(bg_img, xs, ys, bone, selected_color=colors_to_use[bone])
-
-    # plot nodes
-    for center_coordinates in zip(xs, ys):
-        cv2.circle(bg_img, center_coordinates, radius=1, color=(255, 0, 0), thickness=3)
 
     # plot head
     cv2.ellipse(bg_img, center=(xs.loc['face_center'], ys.loc['face_center']),
@@ -29,6 +27,9 @@ def plot_skeleton(bg_img, xs, ys, colors_to_use, face_width, face_height):
                 color=(0, 0, 255),
                 thickness=2)
 
+    # plot nodes, without face points
+    for center_coordinates in zip(xs.drop(FACE_POINTS), ys.drop(FACE_POINTS)):
+        cv2.circle(bg_img, center_coordinates, radius=1, color=(255, 0, 0), thickness=3)
     # cv2.imwrite('test.png', bg_img)
 
 

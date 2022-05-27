@@ -2,6 +2,8 @@ BODYPARTS = ['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_sho
              'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee',
              'left_ankle', 'right_ankle']
 
+FACE_POINTS = ['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'face_center', 'chin']
+
 BONES = [('nose', 'left_eye'),
          ('nose', 'right_eye'),
          ('left_eye', 'left_ear'),
