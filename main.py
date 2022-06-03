@@ -50,7 +50,8 @@ if __name__ == '__main__':
                                                                           ('left_eye', 'left_ear'): (0, 0, 0),
                                                                           ('right_eye', 'right_ear'): (0, 0, 0),
                                                                           ('nose', 'left_shoulder'): (0, 0, 0),
-                                                                          ('nose', 'right_shoulder'): (0, 0, 0)})
+                                                                          ('nose', 'right_shoulder'): (0, 0, 0)},
+                                                             emoji_face='unicorn_poop')
 
     # create final video
     final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=video_path)
