@@ -49,7 +49,7 @@ def images_to_video(generated_images_list, video_path, metadata, audio_source=No
     final_video_path = video_path.split("/")[-1]
 
     video = cv2.VideoWriter(final_video_path, cv2.VideoWriter_fourcc(*'MP4V'), metadata['fps'],
-                            (metadata['width'], metadata['height']))
+                            (metadata['height'], metadata['width']))
 
     for image in generated_images_list:
         video.write(image.astype('uint8'))
