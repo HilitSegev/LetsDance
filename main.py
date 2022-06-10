@@ -22,7 +22,7 @@ if __name__ == '__main__':
         bg_img = np.zeros((metadata['width'], metadata['height'], 3))
     else:
         bg_img = cv2.imread(bg_img_path)
-        bg_img = cv2.resize(bg_img, (metadata['width'], metadata['height']))
+        bg_img = cv2.resize(bg_img, (metadata['height'], metadata['width']))
 
     # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                                                              emoji_face='unicorn_poop')
 
     # create final video
-    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=None)
+    final_video_path = vp.images_to_video(generated_images_list, video_path, metadata=metadata, audio_source=video_path)
 
     # save video to cloud storage
     video_save_success = cloud_manager.save_video_to_cloud(final_video_path)
