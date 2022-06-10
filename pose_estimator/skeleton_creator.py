@@ -54,7 +54,7 @@ def plot_skeleton(bg_img, xs, ys, colors_to_use, face_width, face_height, emoji_
     for center_coordinates in zip(xs.drop(FACE_POINTS), ys.drop(FACE_POINTS)):
         cv2.circle(bg_img, center_coordinates, radius=1, color=(255, 0, 0), thickness=3)
 
-    cv2.imwrite('test.png', bg_img)
+    # cv2.imwrite('test.png', bg_img)
 
 
 def generate_images(fixed_pose_df, mode='sticklight', background_image=None, colors_dict=None, emoji_face=None):
