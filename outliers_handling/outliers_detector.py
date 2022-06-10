@@ -1,12 +1,40 @@
+import pandas as pd
 def detect_outliers(pose_df):
     # TODO: Detect outliers, return list of anomaly_inds
     return []
 
 
+def tuple_smoothing(s, window=5):
+    """
+    s is a series of tuples
+    """
+
+    def series_smoothing(s, window=5):
+        return s.rolling(window).mean().fillna(method='bfill')
+
+    xs, ys, scores = series_smoothing(s.apply(lambda x: x[1]), window), \
+                     series_smoothing(s.apply(lambda x: x[0]), window), \
+                     series_smoothing(s.apply(lambda x: x[2]), window)
+
+    smoothed_s = pd.Series(list(pd.DataFrame().assign(y=ys, x=xs, score=scores).to_records(index=False)))
+    return smoothed_s
+
+
 def fix_outliers(pose_df, anomaly_inds):
     # TODO: Fix outliers
     if len(anomaly_inds) == 0:
-        # smooth
-        pose_df[['face_width', 'face_height']] = pose_df[['face_width', 'face_height']].rolling(50).mean().fillna(
-            method='bfill')
-    return pose_df
+        # smooth the face location
+        pose_df[['face_width', 'face_height']] = (
+            pose_df[['face_width', 'face_height']]
+                .rolling(50)
+                .median()
+                .fillna(method='bfill')
+        )
+
+        # smooth the bodyparts
+        for bodypart in pose_df.columns:
+            if bodypart in ['face_width', 'face_height']:
+                continue
+            pose_df[bodypart] = tuple_smoothing(pose_df[bodypart], window=5)
+
+        return pose_df
