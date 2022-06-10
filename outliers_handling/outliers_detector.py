@@ -21,20 +21,22 @@ def tuple_smoothing(s, window=5):
 
 
 def fix_outliers(pose_df, anomaly_inds):
-    # TODO: Fix outliers
-    if len(anomaly_inds) == 0:
-        # smooth the face location
-        pose_df[['face_width', 'face_height']] = (
-            pose_df[['face_width', 'face_height']]
-                .rolling(50)
-                .median()
-                .fillna(method='bfill')
-        )
+    # TODO: Fix outliers and remove from anomaly_inds
 
-        # smooth the bodyparts
-        for bodypart in pose_df.columns:
-            if bodypart in ['face_width', 'face_height']:
-                continue
-            pose_df[bodypart] = tuple_smoothing(pose_df[bodypart], window=5)
 
-        return pose_df
+
+    # smooth the face location
+    pose_df[['face_width', 'face_height']] = (
+        pose_df[['face_width', 'face_height']]
+            .rolling(50)
+            .median()
+            .fillna(method='bfill')
+    )
+
+    # smooth the bodyparts
+    for bodypart in pose_df.columns:
+        if bodypart in ['face_width', 'face_height']:
+            continue
+        pose_df[bodypart] = tuple_smoothing(pose_df[bodypart], window=5)
+
+    return pose_df
