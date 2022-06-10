@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
+import cv2
 
 from pose_estimator import pose_estimation, skeleton_creator
 from video_processing import video_processor as vp
@@ -11,14 +12,17 @@ import moviepy.editor as mp
 if __name__ == '__main__':
     # load resources for testing; will get from server
     video_path = sys.argv[1]
-    bg_img = sys.argv[2] if len(sys.argv) > 2 else None
+    bg_img_path = sys.argv[2] if len(sys.argv) > 2 else None
 
     # metadata extraction - width, height, fps, video length
     metadata = vp.get_metadata_for_video(video_path)
 
     # set black image as background if no background is given
-    if bg_img is None:
+    if bg_img_path is None:
         bg_img = np.zeros((metadata['width'], metadata['height'], 3))
+    else:
+        bg_img = cv2.imread(bg_img_path)
+        bg_img = cv2.resize(bg_img, (metadata['width'], metadata['height']))
 
     # load data from cache in cloud
     pose_df = cloud_manager.load_pose_df(video_path)
@@ -54,7 +58,7 @@ if __name__ == '__main__':
                                                              emoji_face='unicorn_poop')
 
     # create final video
-    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=video_path)
+    final_video_path = vp.images_to_video(generated_images_list, video_path, audio_source=None)
 
     # save video to cloud storage
     video_save_success = cloud_manager.save_video_to_cloud(final_video_path)
