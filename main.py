@@ -13,6 +13,7 @@ if __name__ == '__main__':
     # load resources for testing; will get from server
     video_path = sys.argv[1]
     bg_img_path = sys.argv[2] if len(sys.argv) > 2 else None
+    emogi_face = sys.argv[3] if len(sys.argv) > 3 else None
 
     # metadata extraction - width, height, fps, video length
     metadata = vp.get_metadata_for_video(video_path)
@@ -55,7 +56,7 @@ if __name__ == '__main__':
                                                                           ('right_eye', 'right_ear'): (0, 0, 0),
                                                                           ('nose', 'left_shoulder'): (0, 0, 0),
                                                                           ('nose', 'right_shoulder'): (0, 0, 0)},
-                                                             emoji_face='piggi')
+                                                             emoji_face=emogi_face)
 
     # create final video
     final_video_path = vp.images_to_video(generated_images_list, video_path, metadata=metadata, audio_source=video_path)
