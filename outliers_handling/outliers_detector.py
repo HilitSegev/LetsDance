@@ -1,6 +1,15 @@
 import pandas as pd
 def detect_outliers(pose_df):
     # TODO: Detect outliers, return list of anomaly_inds
+    df = pose_df.select_dtypes(exclude=[np.number])
+    xs, ys, scores = (df.applymap(lambda x: x[i]) for i in [1, 0, 2])
+    # first condition: at least 50% of the bodyparts with score higher than 0.3
+    cond1_series = (scores.median(axis=1) < 0.3)
+
+    # second condition: face_center must be higher than both shoulders
+    cond2_series = (ys['face_center'] < ys['left_shoulder']) & (ys['face_center'] < ys['right_shoulder'])
+
+    # third condition:
     return []
 
 

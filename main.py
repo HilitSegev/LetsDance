@@ -66,6 +66,16 @@ if __name__ == '__main__':
     # TODO: change this to "return" when not in "main"
     print(final_video_path)
 
+    # FOR DEBUG:
+    sus_frame = 319
+    fig, ax = plt.subplots(2, 2)
+    ax[0, 0].imshow(generated_images_list[sus_frame - 1])
+    ax[0, 1].imshow(generated_images_list[sus_frame])
+    ax[1, 0].imshow(generated_images_list[sus_frame + 1])
+    ax[1, 1].imshow(generated_images_list[sus_frame + 2])
+    fig.savefig("test.png")
+
+    print("DONE")
 #
 # # Press Shift+F10 to execute it or replace it with your code.
 # # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
