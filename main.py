@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import cv2
 
-from pose_estimator import pose_estimation, skeleton_creator
+from pose_estimator import pose_estimation, skeleton_creator, color_configs
 from video_processing import video_processor as vp
 from outliers_handling import outliers_detector
 from cloud_storage import cloud_manager
@@ -14,6 +14,7 @@ if __name__ == '__main__':
     video_path = sys.argv[1]
     bg_img_path = sys.argv[2] if len(sys.argv) > 2 else None
     emogi_face = sys.argv[3] if len(sys.argv) > 3 else None
+    color_pallette = sys.argv[4] if len(sys.argv) > 4 else 'green'
 
     # metadata extraction - width, height, fps, video length
     metadata = vp.get_metadata_for_video(video_path)
@@ -50,12 +51,7 @@ if __name__ == '__main__':
 
     # draw generated images
     generated_images_list = skeleton_creator.generate_images(fixed_pose_df, mode='sticklight', background_image=bg_img,
-                                                             colors_dict={('nose', 'left_eye'): (0, 0, 0),
-                                                                          ('nose', 'right_eye'): (0, 0, 0),
-                                                                          ('left_eye', 'left_ear'): (0, 0, 0),
-                                                                          ('right_eye', 'right_ear'): (0, 0, 0),
-                                                                          ('nose', 'left_shoulder'): (0, 0, 0),
-                                                                          ('nose', 'right_shoulder'): (0, 0, 0)},
+                                                             colors_dict=color_configs.COLORS[color_pallette],
                                                              emoji_face=emogi_face)
 
     # create final video
