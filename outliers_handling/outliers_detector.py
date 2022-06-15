@@ -10,10 +10,10 @@ def detect_outliers(pose_df):
     cond1_series = (scores.median(axis=1) < 0.3)
 
     # second condition: face_center must be higher than both shoulders
-    cond2_series = (ys['face_center'] < ys['left_shoulder']) & (ys['face_center'] < ys['right_shoulder'])
+    cond2_series = (ys['face_center'] > ys['left_shoulder']) & (ys['face_center'] > ys['right_shoulder'])
 
-    # third condition:
-    return []
+    # return anomalies of they satisfy at least one condition
+    return df.loc[cond1_series | cond2_series].index
 
 
 def tuple_smoothing(s, window=5):
