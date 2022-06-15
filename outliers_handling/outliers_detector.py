@@ -1,6 +1,9 @@
 import pandas as pd
+import numpy as np
+
+
 def detect_outliers(pose_df):
-    # TODO: Detect outliers, return list of anomaly_inds
+    # Detect outliers, return list of anomaly_inds
     df = pose_df.select_dtypes(exclude=[np.number])
     xs, ys, scores = (df.applymap(lambda x: x[i]) for i in [1, 0, 2])
     # first condition: at least 50% of the bodyparts with score higher than 0.3
@@ -31,8 +34,6 @@ def tuple_smoothing(s, window=5):
 
 def fix_outliers(pose_df, anomaly_inds):
     # TODO: Fix outliers and remove from anomaly_inds
-
-
 
     # smooth the face location
     pose_df[['face_width', 'face_height']] = (
