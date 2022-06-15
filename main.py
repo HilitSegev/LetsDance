@@ -2,6 +2,8 @@ import sys
 import pandas as pd
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
+
 
 from pose_estimator import pose_estimation, skeleton_creator, color_configs
 from video_processing import video_processor as vp
@@ -14,6 +16,8 @@ if __name__ == '__main__':
     video_path = sys.argv[1]
     bg_img_path = sys.argv[2] if len(sys.argv) > 2 else None
     emogi_face = sys.argv[3] if len(sys.argv) > 3 else None
+    if emogi_face == "None" or emogi_face == "none":
+        emogi_face = None
     color_pallette = sys.argv[4] if len(sys.argv) > 4 else 'green'
 
     # metadata extraction - width, height, fps, video length
@@ -63,15 +67,15 @@ if __name__ == '__main__':
     print(final_video_path)
 
     # FOR DEBUG:
-    sus_frame = 319
-    fig, ax = plt.subplots(2, 2)
-    ax[0, 0].imshow(generated_images_list[sus_frame - 1])
-    ax[0, 1].imshow(generated_images_list[sus_frame])
-    ax[1, 0].imshow(generated_images_list[sus_frame + 1])
-    ax[1, 1].imshow(generated_images_list[sus_frame + 2])
-    fig.savefig("test.png")
-
-    print("DONE")
+    # sus_frame = 319
+    # fig, ax = plt.subplots(2, 2)
+    # ax[0, 0].imshow(generated_images_list[sus_frame - 1])
+    # ax[0, 1].imshow(generated_images_list[sus_frame])
+    # ax[1, 0].imshow(generated_images_list[sus_frame + 1])
+    # ax[1, 1].imshow(generated_images_list[sus_frame + 2])
+    # fig.savefig("test.png")
+    #
+    # print("DONE")
 #
 # # Press Shift+F10 to execute it or replace it with your code.
 # # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
