@@ -52,6 +52,8 @@ def plot_skeleton(bg_img, xs, ys, colors_to_use, face_width, face_height, emoji_
 
     # plot nodes, without face points
     for center_coordinates in zip(xs.drop(FACE_POINTS), ys.drop(FACE_POINTS)):
+        if 'head' not in colors_to_use:
+            colors_to_use['head'] = (0, 255, 0)
         cv2.circle(bg_img, center_coordinates, radius=1, color=colors_to_use['head'], thickness=3)
 
     # cv2.imwrite('test.png', bg_img)
