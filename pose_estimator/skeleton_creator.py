@@ -24,12 +24,14 @@ def plot_skeleton(bg_img, xs, ys, colors_to_use, face_width, face_height, emoji_
 
     # plot head
     if emoji_face is None:
+        if 'head' not in colors_to_use:
+            colors_to_use['head'] = (255, 0, 0)
         cv2.ellipse(bg_img, center=(xs.loc['face_center'], ys.loc['face_center']),
                     axes=(face_width // 2, face_height // 2),
                     angle=0,
                     startAngle=0,
                     endAngle=360,
-                    color=(0, 0, 255),
+                    color=colors_to_use['head'],
                     thickness=2)
     else:
         emoji_img = cv2.imread('resources/emojis/' + emoji_face + '.png')
@@ -90,8 +92,6 @@ def generate_images(fixed_pose_df, mode='sticklight', background_image=None, col
 
         # add skeleton
         plot_skeleton(background_image, xs, ys, colors_to_use, face_width, face_height, emoji_face)
-
-        # TODO: add emoji head
 
         # add final image to list of final images
         final_images_list.append(background_image)

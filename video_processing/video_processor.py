@@ -3,6 +3,8 @@ import os
 import moviepy.editor as mp
 from moviepy.editor import VideoFileClip, AudioFileClip, CompositeAudioClip
 
+AUDIO_FILE_NAME = r"audio_file.mp3"
+
 
 def add_audio_to_video(video_file, audio_file):
     # load the video
@@ -60,9 +62,9 @@ def images_to_video(generated_images_list, video_path, metadata, audio_source=No
     if audio_source is not None:
         my_clip = mp.VideoFileClip(audio_source)
         # TODO:is this the right place to put it?
-        my_clip.audio.write_audiofile(r"audio_file.mp3")
+        my_clip.audio.write_audiofile(AUDIO_FILE_NAME)
         # TODO: add audio to video
-        final_video_path = add_audio_to_video(final_video_path, r"audio_file.mp3")
+        final_video_path = add_audio_to_video(final_video_path, AUDIO_FILE_NAME)
 
     return final_video_path
 

@@ -12,8 +12,11 @@ def detect_outliers(pose_df):
     # second condition: face_center must be higher than both shoulders
     cond2_series = (ys['face_center'] > ys['left_shoulder']) & (ys['face_center'] > ys['right_shoulder'])
 
+    # third condition: face_center must be higher than both hips
+    cond3_series = (ys['face_center'] > ys['left_hip']) & (ys['face_center'] > ys['right_hip'])
+
     # return anomalies of they satisfy at least one condition
-    return df.loc[cond1_series | cond2_series].index
+    return df.loc[cond1_series | cond2_series | cond3_series].index
 
 
 def tuple_smoothing(s, window=5):
@@ -33,49 +36,52 @@ def tuple_smoothing(s, window=5):
 
 
 def fix_outliers(pose_df, anomaly_inds):
-    # TODO: Fix outliers and remove from anomaly_inds
-    df = pose_df.select_dtypes(exclude=[np.number])
-    xs, ys, scores = (df.applymap(lambda x: x[i]) for i in [1, 0, 2])
+    try:
+        # TODO: Fix outliers and remove from anomaly_inds
+        df = pose_df.select_dtypes(exclude=[np.number])
+        xs, ys, scores = (df.applymap(lambda x: x[i]) for i in [1, 0, 2])
 
-    anom_start = 0
-    anom_end = 0
-    i = 0
-    while i < df.shape[0]:
-        if i in anomaly_inds:
-            anom_start = i
-            while i in anomaly_inds:
+        anom_start = 0
+        anom_end = 0
+        i = 0
+        while i < df.shape[0]:
+            if i in anomaly_inds:
+                anom_start = i
+                while i in anomaly_inds:
+                    i += 1
+                anom_end = i - 1
+
+                # interpolate
+                anom_len = anom_end - anom_start + 1
+                int_x = np.linspace(xs.iloc[anom_start - 1], xs.iloc[anom_end + 1], anom_len + 2)
+                int_y = np.linspace(ys.iloc[anom_start - 1], ys.iloc[anom_end + 1], anom_len + 2)
+                int_score = np.linspace(scores.iloc[anom_start - 1], scores.iloc[anom_end + 1], anom_len + 2)
+
+                # make interpolation df
+                int_df = pd.concat([
+                    pd.Series(list(
+                        pd.DataFrame()
+                            .assign(y=int_y[:, k], x=int_x[:, k], score=int_score[:, k])
+                            .to_records(index=False)))
+                    for k in range(int_x.shape[1])
+                ], axis=1)
+                int_df.index = range(anom_start - 1, anom_end + 2)
+                int_df.columns = df.columns
+
+                pose_df.loc[int_df.index, int_df.columns] = int_df
                 i += 1
-            anom_end = i - 1
+            else:
+                i += 1
 
-            # interpolate
-            anom_len = anom_end - anom_start + 1
-            int_x = np.linspace(xs.iloc[anom_start - 1], xs.iloc[anom_end + 1], anom_len + 2)
-            int_y = np.linspace(ys.iloc[anom_start - 1], ys.iloc[anom_end + 1], anom_len + 2)
-            int_score = np.linspace(scores.iloc[anom_start - 1], scores.iloc[anom_end + 1], anom_len + 2)
-
-            # make interpolation df
-            int_df = pd.concat([
-                pd.Series(list(
-                    pd.DataFrame()
-                        .assign(y=int_y[:, k], x=int_x[:, k], score=int_score[:, k])
-                        .to_records(index=False)))
-                for k in range(int_x.shape[1])
-            ], axis=1)
-            int_df.index = range(anom_start - 1, anom_end + 2)
-            int_df.columns = df.columns
-
-            pose_df.loc[int_df.index, int_df.columns] = int_df
-            i+=1
-        else:
-            i += 1
-
-    # smooth the face location
-    pose_df[['face_width', 'face_height']] = (
-        pose_df[['face_width', 'face_height']]
-            .rolling(50)
-            .median()
-            .fillna(method='bfill')
-    )
+        # smooth the face location
+        pose_df[['face_width', 'face_height']] = (
+            pose_df[['face_width', 'face_height']]
+                .rolling(50)
+                .median()
+                .fillna(method='bfill')
+        )
+    except:
+        pass
 
     # smooth the bodyparts
     for bodypart in pose_df.columns:
